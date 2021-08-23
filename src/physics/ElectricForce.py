@@ -9,14 +9,14 @@ class ElectricForce:
     """
     K = 8.99e9  # Coulomb's constant
 
-    def __init__(self, q1, q2, draw=True, base_scale_factor=1, logging=False, indicator_props=None):
+    def __init__(self, q1, q2, draw=True, base_scale_factor=1, trace_log=False, indicator_props=None):
         if indicator_props is None:
             indicator_props = {}
 
         self.q1 = q1
         self.q2 = q2
         self.base_scale_factor = base_scale_factor
-        self.logging = logging
+        self.trace_log = trace_log
         self.indicator_props = indicator_props
         self.indicator = None
         self.tick()
@@ -35,7 +35,7 @@ class ElectricForce:
     def __tick_r_vec__(self):
         """Calculate the r-vector from q1 to q2"""
         self.r_vector = self.q2.pos - self.q1.pos
-        if self.logging:
+        if self.trace_log:
             print("INFO: New r-vector for force of {0} on {1} calculated as {2}".format(self.q1.get_label_text(),
                                                                                         self.q2.get_label_text(),
                                                                                         self.r_vector))
@@ -44,7 +44,7 @@ class ElectricForce:
     def __tick_force__(self):
         """Calculate electric force between q1 and q2"""
         self.value = (self.K * self.q1.value * self.q2.value * self.r_vector) / (mag(self.r_vector) ** 3)
-        if self.logging:
+        if self.trace_log:
             print("INFO: New value for force of {0} on {1} calculated as {2}".format(self.q1.get_label_text(),
                                                                                      self.q2.get_label_text(),
                                                                                      self.value))
@@ -78,29 +78,33 @@ class ElectricForce:
 
         if force_mag < size_lower_bound:
             # We need to make the indicator bigger
-            print("INFO: Force mag is {0} < {1} so indicator scale will be adjusted larger".format(force_mag,
-                                                                                                   size_lower_bound)) if self.logging else None
+            if self.trace_log:
+                print("INFO: Force mag is {0} < {1} so indicator scale will be adjusted larger".format(force_mag,
+                                                                                                       size_lower_bound))
             return base_scale_factor * (3 * force_mag)
         elif size_lower_bound <= force_mag <= size_upper_bound:
             # No need to rescale the arrow at this time
-            print(
-                "INFO: Force mag is {0} <= {1} <= {2} so indicator scale will not be adjusted".format(size_lower_bound,
-                                                                                                      force_mag,
-                                                                                                      size_upper_bound)) if self.logging else None
+            if self.trace_log:
+                print(
+                    "INFO: Force mag is {0} <= {1} <= {2} so indicator scale will not be adjusted".format(
+                        size_lower_bound,
+                        force_mag,
+                        size_upper_bound))
             return base_scale_factor
         else:
             # We need to make the indicator smaller
-            print("INFO: Force mag is {0} > {1} so indicator scale will be adjusted smaller".format(force_mag,
-                                                                                                    size_upper_bound)) if self.logging else None
+            if self.trace_log:
+                print("INFO: Force mag is {0} > {1} so indicator scale will be adjusted smaller".format(force_mag,
+                                                                                                        size_upper_bound))
             return base_scale_factor * (1 / (2 * force_mag))
 
     def scale_indicator(self, scale_factor=None):
         """Scale the indicator by the given value"""
         if scale_factor is None:
             # reset axis if scale_factor not provided
-            print("INFO: Resetting indicator scale to force value") if self.logging else None
+            print("INFO: Resetting indicator scale to force value") if self.trace_log else None
             self.indicator.axis = self.value
         else:
             # multiply axis by provided scale_factor
-            print("INFO: Scaling indicator by scale factor of {0:.2e}".format(scale_factor)) if self.logging else None
+            print("INFO: Scaling indicator by scale factor of {0:.2e}".format(scale_factor)) if self.trace_log else None
             self.indicator.axis *= scale_factor
