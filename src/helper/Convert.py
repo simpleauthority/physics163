@@ -7,10 +7,25 @@ class Convert:
     @staticmethod
     def scale_number(number, original_unit=Unit.BASE, desired_unit=Unit.BASE):
         """
-        Scales a number to a specific power of 10 by first checking what its current power of 10 is then scaling
-        appropriately. If original_unit is not specified, the function assumes the exponent on number implies the unit
-        and will scale accordingly. If original_unit is specified, the original_unit's exponent will be
-        taken into account before scaling occurs.
+        Scales a number to a specific power of 10 by first converting the given
+        number and its given original unit to base SI units if they are not already
+        in that form. Once there, the desired unit's exponent is extracted and inspected.
+        
+        If the desired exponent is base units, the method finishes there. Otherwise,
+        if the desired exponent is greater than 0 the number in base units is then
+        divided by the desired unit's value (1 x 10^a, a = desired exponent).
+        
+        Otherwise, the number in base units is multiplied by the desired unit's value.
+        Since in this case the exponent is negative, we must in fact divide by the
+        desired unit's reciprocal value.
+        
+        The end result is a number scaled to the desired dimension.
+        
+        For example, scale_number(5, original_unit=Unit.PICO, desired_unit=Unit.KILO):
+            1. number is multiplied by 1x10^(-12) to become 5e-12.
+            2. desired exponent is extracted and found to be 3.
+            3. desired exponent is greater than zero, thus:
+                5e-12 / 1e3 = 5e-15  
         """
         # Ensure original unit is not None
         if original_unit is None:
