@@ -74,14 +74,14 @@ class ElectricForce:
         or 2) the constant scale factor
         """
 
-        force_mag = mag(self.value) * 1e9
+        force_mag = mag(self.value)
 
         if force_mag < size_lower_bound:
             # We need to make the indicator bigger
             if self.trace_log:
                 print("INFO: Force mag is {0} < {1} so indicator scale will be adjusted larger".format(force_mag,
                                                                                                        size_lower_bound))
-            return base_scale_factor * (3 * force_mag)
+            return base_scale_factor
         elif size_lower_bound <= force_mag <= size_upper_bound:
             # No need to rescale the arrow at this time
             if self.trace_log:
@@ -96,7 +96,7 @@ class ElectricForce:
             if self.trace_log:
                 print("INFO: Force mag is {0} > {1} so indicator scale will be adjusted smaller".format(force_mag,
                                                                                                         size_upper_bound))
-            return base_scale_factor * (1 / (2 * force_mag))
+            return base_scale_factor * 1e-7
 
     def scale_indicator(self, scale_factor=None):
         """Scale the indicator by the given value"""
