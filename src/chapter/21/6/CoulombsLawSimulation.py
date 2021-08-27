@@ -29,15 +29,15 @@ class CoulombsLawSimulation:
         self.x = self.X_MIN
 
         # Create q1, a statically positioned charge located at D i-hat
-        self.charge1 = ElectricCharge(value=-1 * self.E, pos=vec(self.D, 0, 0), name="q1", value_alias="-e", draw=True,
+        self.charge1 = ElectricCharge(value=-1 * self.E, position=vec(self.D, 0, 0), name="q1", value_alias="-e", draw=True,
                                       object_props=dict(radius=0.20 * self.D, color=color.cyan))
 
         # Create q2, a statically positioned charge located at -D i-hat
-        self.charge2 = ElectricCharge(value=2 * self.E, pos=vec(-self.D, 0, 0), name="q2", value_alias="2e", draw=True,
+        self.charge2 = ElectricCharge(value=2 * self.E, position=vec(-self.D, 0, 0), name="q2", value_alias="2e", draw=True,
                                       object_props=dict(radius=0.24 * self.D, color=color.red))
 
         # Create q3, a dynamically positioned charge
-        self.charge3 = ElectricCharge(value=-1 * self.E, pos=vec(self.x, 0, 0), name="q3", value_alias="e", draw=True,
+        self.charge3 = ElectricCharge(value=-1 * self.E, position=vec(self.x, 0, 0), name="q3", value_alias="e", draw=True,
                                       object_props=dict(radius=0.15 * self.D, color=vec(0.8, 0, 1),
                                                         opacity=0.8))
 
@@ -72,7 +72,7 @@ class CoulombsLawSimulation:
 
         # Some labels
         self.charge3_additional_label_tmpl = "x = {0:.3}nm"
-        self.charge3_additional_label = label(pos=self.charge3.object.pos + vec(0, 2e-9, 0),
+        self.charge3_additional_label = label(pos=self.charge3.object.position + vec(0, 2e-9, 0),
                                               text="label not initialized")
 
     def toggle_trace(self):

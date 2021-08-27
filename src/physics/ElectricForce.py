@@ -26,15 +26,15 @@ class ElectricForce:
 
     def set_q1_pos(self, pos):
         """Tick the position of q1"""
-        self.q1.pos = pos
+        self.q1.position = pos
 
     def set_q2_pos(self, pos):
         """Tick the position of q2"""
-        self.q2.pos = pos
+        self.q2.position = pos
 
     def __tick_r_vec__(self):
         """Calculate the r-vector from q1 to q2"""
-        self.r_vector = self.q2.pos - self.q1.pos
+        self.r_vector = self.q2.position - self.q1.position
         if self.trace_log:
             print("INFO: New r-vector for force of {0} on {1} calculated as {2}".format(self.q1.get_label_text(),
                                                                                         self.q2.get_label_text(),
@@ -53,13 +53,13 @@ class ElectricForce:
     def draw_indicator(self):
         """Draw the indicator arrow at q2.pos"""
         if self.indicator is None:
-            self.indicator = arrow(pos=self.q2.pos, axis=self.value * self.indicator_scale_factor(
+            self.indicator = arrow(pos=self.q2.position, axis=self.value * self.indicator_scale_factor(
                 base_scale_factor=self.base_scale_factor), **self.indicator_props)
 
     def tick_indicator(self):
         """Tick the indicator position and axis"""
         if self.indicator is not None:
-            self.indicator.pos = self.q2.pos
+            self.indicator.position = self.q2.position
             self.indicator.axis = self.value * self.indicator_scale_factor(base_scale_factor=self.base_scale_factor)
 
     def tick(self):
