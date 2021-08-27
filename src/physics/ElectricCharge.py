@@ -7,7 +7,10 @@ class ElectricCharge:
     also accepts a dictionary of object properties in order to draw a spherical object to represent it if desired.
     """
 
-    def __init__(self, value, pos, name, value_alias=None, draw=True, object_props=None):
+    def __init__(self, value, pos, name, value_alias=None, draw=True, extra=None, object_props=None):
+        if extra is None:
+            extra = {}
+
         if object_props is None:
             object_props = {}
 
@@ -16,6 +19,7 @@ class ElectricCharge:
         self.name = name
         self.value_alias = value_alias
         self.draw = draw
+        self.extra = extra
         self.object_props = object_props
         self.object = None
         self.label = None
