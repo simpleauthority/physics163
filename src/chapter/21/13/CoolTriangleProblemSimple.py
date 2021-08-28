@@ -3,10 +3,7 @@ from vpython import *
 # Configure the scene
 scene.width = 800
 scene.height = 600
-scene.title = "<h2>Problem 21.13</h2><br><strong>Click to reposition moving charge.</strong><br /><strong>Close when done (this sim does not stop on its own).</strong><br /><br /><em>If q4 flies off screen it means it was directly on top of q1, q2, or q3 and this makes the force become unmanageably large. <strong>Just click somewhere else.</strong></em><br /><br />"
-
-# Config
-stop = False
+scene.title = "<h2>Problem 21.13</h2><br><strong>Click to reposition moving charge.</strong><br /><strong>Close when done (this sim does not stop on its own).</strong><br /><br />"
 
 # Constants
 charge_radius = 3e-4
@@ -23,6 +20,11 @@ def scale_factor(force):
     factor = charge_radius / mag(force)
     # print("Scale factor will be ", factor)
     return factor
+
+
+def detect_collision(sph1, sph2):
+    dist_squared = pow(sph2.pos.x - sph1.pos.x, 2) + pow(sph2.pos.y - sph1.pos.y, 2) + pow(sph2.pos.z - sph1.pos.z, 2)
+    return dist_squared <= pow(sph1.radius + sph2.radius, 2)
 
 
 # axes
@@ -124,6 +126,16 @@ while True:
 
     # update net force
     fnet = f14 + f24 + f34
+
+    # checks if q4 is colliding with q1, q2, or q3
+    # if it is, we remove that object from affecting net force
+    # while not physically accurate, if the r-vec gets too small (approaches 0)
+    # then the force approaches infinity and q4 flies off the screen entirely
+    # so...this stops that
+    for objects in ((q1, f14), (q2, f24), (q3, f34)):
+        if detect_collision(objects[0], q4):
+            fnet -= objects[1]
+
     # print("fnet = ", fnet)
     fnetarrow.pos = q4.pos
     fnetarrow.axis = fnet * scale_factor(fnet)
@@ -143,5 +155,6 @@ while True:
 
     # update q4's label
     q4.lab.pos = q4.pos
+
 
     t += dt
