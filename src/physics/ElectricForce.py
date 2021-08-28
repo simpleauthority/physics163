@@ -1,6 +1,4 @@
 from vpython import arrow, mag
-from util.math.Convert import Convert
-from util.math.Unit import Unit
 
 
 class ElectricForce:
@@ -11,12 +9,13 @@ class ElectricForce:
     """
     K = 8.99e9  # Coulomb's constant
 
-    def __init__(self, q1, q2, draw=True, base_scale_factor=1, trace_log=False, indicator_props=None):
+    def __init__(self, q1, q2, name, draw=True, base_scale_factor=1, trace_log=False, indicator_props=None):
         if indicator_props is None:
             indicator_props = {}
 
         self.q1 = q1
         self.q2 = q2
+        self.name = name
         self.base_scale_factor = base_scale_factor
         self.trace_log = trace_log
         self.indicator_props = indicator_props
@@ -70,6 +69,10 @@ class ElectricForce:
         self.__tick_force__()
         self.tick_indicator()
 
+    def print(self):
+        print("force {0} = ".format(self.name), self.value)
+        print("force mag {0} = ".format(self.name), mag(self.value))
+
     def indicator_scale_factor(self, size_lower_bound=10, size_upper_bound=100, base_scale_factor=1):
         """
         Inspect the force magnitude and decide on either 1) a proportional scale factor
@@ -80,47 +83,29 @@ class ElectricForce:
 
         if force_mag < size_lower_bound:
             # We need to make the indicator bigger
-<<<<<<< Updated upstream
             if self.trace_log:
                 print("INFO: Force mag is {0} < {1} so indicator scale will be adjusted larger".format(force_mag,
                                                                                                        size_lower_bound))
             return base_scale_factor
-=======
-            #if self.trace_log:
-                #print("INFO: Force mag is {0}N < {1} so indicator scale will be adjusted larger".format(force_mag,
-                                                                                                       #size_lower_bound))
-            return base_scale_factor * (3 * force_mag)
->>>>>>> Stashed changes
         elif size_lower_bound <= force_mag <= size_upper_bound:
             # No need to rescale the arrow at this time
-            #if self.trace_log:
-                #print(
-                    #"INFO: Force mag is {0}N <= {1} <= {2} so indicator scale will not be adjusted".format(
-                        #size_lower_bound,
-                        #force_mag,
-                        #size_upper_bound))
+            # if self.trace_log:
+            # print("INFO: Force mag is {0}N <= {1} <= {2} so indicator scale will not be adjusted".format(size_lower_bound, force_mag,vsize_upper_bound))
             return base_scale_factor
         else:
             # We need to make the indicator smaller
-<<<<<<< Updated upstream
             if self.trace_log:
                 print("INFO: Force mag is {0} > {1} so indicator scale will be adjusted smaller".format(force_mag,
                                                                                                         size_upper_bound))
             return base_scale_factor * 1e-7
-=======
-            #if self.trace_log:
-                # print("INFO: Force mag is {0}N > {1} so indicator scale will be adjusted smaller".format(force_mag,
-                                                                                                        #size_upper_bound))
-            return base_scale_factor * 1e-5
->>>>>>> Stashed changes
 
     def scale_indicator(self, scale_factor=None):
         """Scale the indicator by the given value"""
         if scale_factor is None:
             # reset axis if scale_factor not provided
-            #print("INFO: Resetting indicator scale to force value") if self.trace_log else None
+            # print("INFO: Resetting indicator scale to force value") if self.trace_log else None
             self.indicator.axis = self.value
         else:
             # multiply axis by provided scale_factor
-            #print("INFO: Scaling indicator by scale factor of {0:.2e}".format(scale_factor)) if self.trace_log else None
+            # print("INFO: Scaling indicator by scale factor of {0:.2e}".format(scale_factor)) if self.trace_log else None
             self.indicator.axis *= scale_factor

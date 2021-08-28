@@ -1,6 +1,6 @@
 from enum import Enum
 
-from util.math.Misc import MathHelpers
+from util.math.Misc import Misc
 
 
 class Unit(Enum):
@@ -34,10 +34,10 @@ class Unit(Enum):
         """Determines the unit of a number by extracting its exponent and then comparing the exponents"""
         print("INFO: Determining unit for {0}...".format(value))
 
-        value_exp = MathHelpers.extract_exponent_common(value)
+        value_exp = Misc.extract_exponent_common(value)
 
         for item in Unit:
-            item_exp = MathHelpers.extract_exponent_common(item.value)
+            item_exp = Misc.extract_exponent_common(item.value)
 
             if value_exp == item_exp:
                 print("INFO: Unit for {0} is {1}".format(value, item))

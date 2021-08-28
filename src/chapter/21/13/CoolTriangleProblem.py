@@ -11,13 +11,13 @@ global_arrow_scale_factor = 1e12
 
 class CoolTriangleProblem:
     def __init__(self):
-        self.trace_log = False  # whether or not to log a bunch of crap
+        self.trace_log = True  # whether or not to log a bunch of crap
         self.dt = 1e-3  # how much to step the loop per iteration
         self.t = 0  # how much time has elapsed
         self.q = 1e-8  # e; magnitude of electron charge
 
-        self.x_axis = cylinder(pos=vec(-6e-3, 0, 0), axis=vec(12e-3, 0, 0), radius=3e-5)
-        self.y_axis = cylinder(pos=vec(0, -1e-3, 0), axis=vec(0, 10e-3, 0), radius=3e-5)
+        self.x_axis = cylinder(pos=vec(-9e-4, 0, 0), axis=vec(18e-4, 0, 0), radius=3e-6)
+        self.y_axis = cylinder(pos=vec(0, -1e-4, 0), axis=vec(0, 9e-4, 0), radius=3e-6)
 
         # Create q1-q3, statically positioned charges positioned in a triangle shape
         self.charge1 = ElectricCharge(value=-1 * self.q, position=vec(0, 8e-4, 0), name="q1", value_alias="-q",
@@ -34,7 +34,7 @@ class CoolTriangleProblem:
 
         # Create q4, a dynamically positioned charge
         self.charge4 = ElectricCharge(value=self.q, position=vec(4e-4, 6e-4, 0), name="q4", value_alias="q", draw=True,
-                                      extra=dict(mass=1e-7), object_props=dict(radius=3e-5, color=color.blue))
+                                      extra=dict(mass=1e-2), object_props=dict(radius=3e-5, color=color.blue))
         self.charge4_a = vec(0, 0, 0)
         self.charge4_v = vec(0, 0, 0)
 
@@ -42,15 +42,15 @@ class CoolTriangleProblem:
         scene.camera.follow(self.charge4.object)
 
         # Create and draw force14, force24, force34
-        self.force14 = ElectricForce(q1=self.charge1, q2=self.charge4, draw=True,
+        self.force14 = ElectricForce(q1=self.charge1, q2=self.charge4, name="14", draw=False,
                                      base_scale_factor=global_arrow_scale_factor, trace_log=self.trace_log,
                                      indicator_props=dict(color=self.charge1.object_props['color'], opacity=0.5))
 
-        self.force24 = ElectricForce(q1=self.charge2, q2=self.charge4, draw=True,
+        self.force24 = ElectricForce(q1=self.charge2, q2=self.charge4, name="24", draw=False,
                                      base_scale_factor=global_arrow_scale_factor, trace_log=self.trace_log,
                                      indicator_props=dict(color=self.charge2.object_props['color'], opacity=0.5))
 
-        self.force34 = ElectricForce(q1=self.charge3, q2=self.charge4, draw=True,
+        self.force34 = ElectricForce(q1=self.charge3, q2=self.charge4, name="34", draw=False,
                                      base_scale_factor=global_arrow_scale_factor, trace_log=self.trace_log,
                                      indicator_props=dict(color=self.charge3.object_props['color'], opacity=0.5))
 
@@ -71,13 +71,14 @@ class CoolTriangleProblem:
         print("loop dt = ", self.dt)
         while self.t <= 1000:
             # This loop will run at a maximum of 90 its/sec
-            rate(60)
+            rate(1/self.dt)
 
             print("itr for t = ", self.t)
 
             # Tick the forces
             for force in (self.force14, self.force24, self.force34):
                 force.tick()
+                force.print()
 
             # Get net force
             self.net_force = self.force14.value + self.force24.value + self.force34.value
@@ -117,9 +118,7 @@ class CoolTriangleProblem:
             #     break
 
             self.t += self.dt
-            print("\n")
-
-            print("\n\n================\n\n")
+            print("\n====\n")
 
 
 # Start the simulation
