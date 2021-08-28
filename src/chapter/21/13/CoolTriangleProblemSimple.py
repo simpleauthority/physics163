@@ -3,7 +3,7 @@ from vpython import *
 # Configure the scene
 scene.width = 800
 scene.height = 600
-scene.title = "<h2>Problem 23.13</h2><br><strong>Click to reposition moving charge.</strong><br /><strong>Close when done (this sim does not stop on its own).</strong><br /><br /><em>If q4 flies off screen it means it was directly on top of q1, q2, or q3 and this makes the force become unmanageably large. <strong>Just click somewhere else.</strong></em><br /><br />"
+scene.title = "<h2>Problem 21.13</h2><br><strong>Click to reposition moving charge.</strong><br /><strong>Close when done (this sim does not stop on its own).</strong><br /><br /><em>If q4 flies off screen it means it was directly on top of q1, q2, or q3 and this makes the force become unmanageably large. <strong>Just click somewhere else.</strong></em><br /><br />"
 
 # Config
 stop = False
