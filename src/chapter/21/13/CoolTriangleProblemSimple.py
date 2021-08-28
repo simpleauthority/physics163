@@ -39,7 +39,7 @@ q3 = sphere(pos=vec(5e-4, 0, 0), radius=5e-5, color=color.green)
 q3.chg = -1 * q
 q3.lab = label(pos=q3.pos, text="q3=-q", height=11)
 
-q4 = sphere(pos=vec(-8e-4, 7e-4, 0), radius=5e-5, color=color.orange)
+q4 = sphere(pos=vec(-8e-4, 7e-4, 0), radius=5e-5, color=color.orange, make_trail=True, retain=500)
 q4.chg = q
 q4.m = 3e-16
 q4.a = vec(0, 0, 0)  # accel
@@ -84,6 +84,7 @@ fnetarrow.lab = label(pos=fnetarrow.pos + fnetarrow.axis, text="f_net", height=1
 def move_q4_to_mouse(evt):
     q4.pos = evt.pos
     q4.v = vec(0, 0, 0)
+    q4.clear_trail()
 
 
 scene.bind('click', move_q4_to_mouse)
