@@ -3,7 +3,7 @@ from vpython import sphere, label, vec
 
 class ElectricCharge:
     """
-    ElectricCharge represents a physical electric charge. It has a signed magnitude and a vector position. The class
+    ElectricCharge represents a physical electric charge. It has a signed magnitude and a vector.py position. The class
     also accepts a dictionary of object properties in order to draw a spherical object to represent it if desired.
     """
     def __init__(self, value, position, name, value_alias=None, draw=True, extra=None, object_props=None):

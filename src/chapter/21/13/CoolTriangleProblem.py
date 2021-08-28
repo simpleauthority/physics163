@@ -14,10 +14,10 @@ class CoolTriangleProblem:
         self.trace_log = False  # whether or not to log a bunch of crap
         self.dt = 1e-3  # how much to step the loop per iteration
         self.t = 0  # how much time has elapsed
-        self.q = 1e-6  # e; magnitude of electron charge
+        self.q = 1e-8  # e; magnitude of electron charge
 
-        # self.x_axis = cylinder(pos=vec(-4e-9, 0, 0), axis=vec(4e-9, 0, 0), radius=0.05)
-        # self.y_axis = cylinder(pos=vec(0, -6e-9, 0), axis=vec(0, 6e-9, 0), radius=0.05)
+        self.x_axis = cylinder(pos=vec(-6e-3, 0, 0), axis=vec(12e-3, 0, 0), radius=3e-5)
+        self.y_axis = cylinder(pos=vec(0, -1e-3, 0), axis=vec(0, 10e-3, 0), radius=3e-5)
 
         # Create q1-q3, statically positioned charges positioned in a triangle shape
         self.charge1 = ElectricCharge(value=-1 * self.q, position=vec(0, 8e-4, 0), name="q1", value_alias="-q",
@@ -118,6 +118,8 @@ class CoolTriangleProblem:
 
             self.t += self.dt
             print("\n")
+
+            print("\n\n================\n\n")
 
 
 # Start the simulation

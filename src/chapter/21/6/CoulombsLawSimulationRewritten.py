@@ -1,9 +1,9 @@
 from vpython import *
 
-from helper.Simulation import Simulation
-from helper.Convert import Convert
-from helper.Unit import Unit
-from helper.LogLevel import LogLevel
+from util.Simulation import Simulation
+from util.math.Convert import Convert
+from util.math.Unit import Unit
+from util.LogLevel import LogLevel
 from physics.ElectricCharge import ElectricCharge
 from physics.ElectricForce import ElectricForce
 

@@ -1,5 +1,5 @@
 from vpython import graph, gcurve, vec, rate
-from helper.LogLevel import LogLevel
+from util.LogLevel import LogLevel
 
 
 class Simulation:

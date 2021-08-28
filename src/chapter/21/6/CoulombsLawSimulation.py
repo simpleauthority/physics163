@@ -1,7 +1,7 @@
 from vpython import *
 
-from helper.Convert import Convert
-from helper.Unit import Unit
+from util.math.Convert import Convert
+from util.math.Unit import Unit
 from physics.ElectricCharge import ElectricCharge
 from physics.ElectricForce import ElectricForce
 

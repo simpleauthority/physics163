@@ -1,4 +1,6 @@
 from vpython import arrow, mag
+from util.math.Convert import Convert
+from util.math.Unit import Unit
 
 
 class ElectricForce:
@@ -33,21 +35,21 @@ class ElectricForce:
         self.q2.position = pos
 
     def __tick_r_vec__(self):
-        """Calculate the r-vector from q1 to q2"""
+        """Calculate the r-vector.py from q1 to q2"""
         self.r_vector = self.q2.position - self.q1.position
-        if self.trace_log:
-            print("INFO: New r-vector for force of {0} on {1} calculated as {2}".format(self.q1.get_label_text(),
-                                                                                        self.q2.get_label_text(),
-                                                                                        self.r_vector))
+        # if self.trace_log:
+        #     print("INFO: New r-vector.py for force of {0} on {1} calculated as {2}".format(self.q1.get_label_text(),
+        #                                                                                 self.q2.get_label_text(),
+        #                                                                                 self.r_vector))
         return self.r_vector
 
     def __tick_force__(self):
         """Calculate electric force between q1 and q2"""
         self.value = (self.K * self.q1.value * self.q2.value * self.r_vector) / (mag(self.r_vector) ** 3)
-        if self.trace_log:
-            print("INFO: New value for force of {0} on {1} calculated as {2}".format(self.q1.get_label_text(),
-                                                                                     self.q2.get_label_text(),
-                                                                                     self.value))
+        # if self.trace_log:
+        #     print("INFO: New value for force of {0} on {1} calculated as {2}".format(self.q1.get_label_text(),
+        #                                                                              self.q2.get_label_text(),
+        #                                                                              self.value))
         return self.value
 
     def draw_indicator(self):
@@ -63,12 +65,12 @@ class ElectricForce:
             self.indicator.axis = self.value * self.indicator_scale_factor(base_scale_factor=self.base_scale_factor)
 
     def tick(self):
-        """Tick the force (recalculate r-vector and force)"""
+        """Tick the force (recalculate r-vector.py and force)"""
         self.__tick_r_vec__()
         self.__tick_force__()
         self.tick_indicator()
 
-    def indicator_scale_factor(self, size_lower_bound=0.3, size_upper_bound=0.5, base_scale_factor=1):
+    def indicator_scale_factor(self, size_lower_bound=10, size_upper_bound=100, base_scale_factor=1):
         """
         Inspect the force magnitude and decide on either 1) a proportional scale factor
         or 2) the constant scale factor
@@ -78,33 +80,47 @@ class ElectricForce:
 
         if force_mag < size_lower_bound:
             # We need to make the indicator bigger
+<<<<<<< Updated upstream
             if self.trace_log:
                 print("INFO: Force mag is {0} < {1} so indicator scale will be adjusted larger".format(force_mag,
                                                                                                        size_lower_bound))
             return base_scale_factor
+=======
+            #if self.trace_log:
+                #print("INFO: Force mag is {0}N < {1} so indicator scale will be adjusted larger".format(force_mag,
+                                                                                                       #size_lower_bound))
+            return base_scale_factor * (3 * force_mag)
+>>>>>>> Stashed changes
         elif size_lower_bound <= force_mag <= size_upper_bound:
             # No need to rescale the arrow at this time
-            if self.trace_log:
-                print(
-                    "INFO: Force mag is {0} <= {1} <= {2} so indicator scale will not be adjusted".format(
-                        size_lower_bound,
-                        force_mag,
-                        size_upper_bound))
+            #if self.trace_log:
+                #print(
+                    #"INFO: Force mag is {0}N <= {1} <= {2} so indicator scale will not be adjusted".format(
+                        #size_lower_bound,
+                        #force_mag,
+                        #size_upper_bound))
             return base_scale_factor
         else:
             # We need to make the indicator smaller
+<<<<<<< Updated upstream
             if self.trace_log:
                 print("INFO: Force mag is {0} > {1} so indicator scale will be adjusted smaller".format(force_mag,
                                                                                                         size_upper_bound))
             return base_scale_factor * 1e-7
+=======
+            #if self.trace_log:
+                # print("INFO: Force mag is {0}N > {1} so indicator scale will be adjusted smaller".format(force_mag,
+                                                                                                        #size_upper_bound))
+            return base_scale_factor * 1e-5
+>>>>>>> Stashed changes
 
     def scale_indicator(self, scale_factor=None):
         """Scale the indicator by the given value"""
         if scale_factor is None:
             # reset axis if scale_factor not provided
-            print("INFO: Resetting indicator scale to force value") if self.trace_log else None
+            #print("INFO: Resetting indicator scale to force value") if self.trace_log else None
             self.indicator.axis = self.value
         else:
             # multiply axis by provided scale_factor
-            print("INFO: Scaling indicator by scale factor of {0:.2e}".format(scale_factor)) if self.trace_log else None
+            #print("INFO: Scaling indicator by scale factor of {0:.2e}".format(scale_factor)) if self.trace_log else None
             self.indicator.axis *= scale_factor
