@@ -61,25 +61,27 @@ scene.range = 8e-4
 # noinspection PyTypeChecker
 f14 = calc_force12(q1, q4)
 f14arrow = arrow(pos=q4.pos, axis=f14 * scale_factor(f14), color=q1.color + q4.color, opacity=0.3)
-f14arrow.lab = label(pos=f14arrow.pos+f14arrow.axis, text="f14", height=11)
+f14arrow.lab = label(pos=f14arrow.pos + f14arrow.axis, text="f14", height=11)
 # print("f14 = ", f14)
 
 # noinspection PyTypeChecker
 f24 = calc_force12(q2, q4)
 f24arrow = arrow(pos=q4.pos, axis=f24 * scale_factor(f24), color=q2.color + q4.color, opacity=0.3)
-f24arrow.lab = label(pos=f24arrow.pos+f24arrow.axis, text="f24", height=11)
+f24arrow.lab = label(pos=f24arrow.pos + f24arrow.axis, text="f24", height=11)
 # print("f24 = ", f24)
 
 # noinspection PyTypeChecker
 f34 = calc_force12(q3, q4)
 f34arrow = arrow(pos=q4.pos, axis=f34 * scale_factor(f34), color=q3.color + q4.color, opacity=0.3)
-f34arrow.lab = label(pos=f34arrow.pos+f34arrow.axis, text="f34", height=11)
+f34arrow.lab = label(pos=f34arrow.pos + f34arrow.axis, text="f34", height=11)
 # print("f34 = ", f34)
 
 # get net force
 fnet = f14 + f24 + f34
 fnetarrow = arrow(pos=q4.pos, axis=fnet * scale_factor(fnet), color=color.yellow, opacity=0.3)
-fnetarrow.lab = label(pos=fnetarrow.pos+fnetarrow.axis, text="f_net", height=11)
+fnetarrow.lab = label(pos=fnetarrow.pos + fnetarrow.axis, text="f_net", height=11)
+
+
 # print("fnet = ", fnet)
 
 
@@ -108,21 +110,21 @@ while True:
     # print("f14 = ", f14)
     f14arrow.pos = q4.pos
     f14arrow.axis = f14 * scale_factor(f14)
-    f14arrow.lab.pos = f14arrow.pos+f14arrow.axis
+    f14arrow.lab.pos = f14arrow.pos + f14arrow.axis
 
     # noinspection PyTypeChecker
     f24 = calc_force12(q2, q4)
     # print("f24 = ", f24)
     f24arrow.pos = q4.pos
     f24arrow.axis = f24 * scale_factor(f24)
-    f24arrow.lab.pos = f24arrow.pos+f24arrow.axis
+    f24arrow.lab.pos = f24arrow.pos + f24arrow.axis
 
     # noinspection PyTypeChecker
     f34 = calc_force12(q3, q4)
     # print("f34 = ", f34)
     f34arrow.pos = q4.pos
     f34arrow.axis = f34 * scale_factor(f34)
-    f34arrow.lab.pos = f34arrow.pos+f34arrow.axis
+    f34arrow.lab.pos = f34arrow.pos + f34arrow.axis
 
     # update net force
     fnet = f14 + f24 + f34
@@ -139,7 +141,7 @@ while True:
     # print("fnet = ", fnet)
     fnetarrow.pos = q4.pos
     fnetarrow.axis = fnet * scale_factor(fnet)
-    fnetarrow.lab.pos = fnetarrow.pos+fnetarrow.axis
+    fnetarrow.lab.pos = fnetarrow.pos + fnetarrow.axis
 
     # update accel
     q4.a = fnet / q4.m
@@ -155,6 +157,5 @@ while True:
 
     # update q4's label
     q4.lab.pos = q4.pos
-
 
     t += dt
