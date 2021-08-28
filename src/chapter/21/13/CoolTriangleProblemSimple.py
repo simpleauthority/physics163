@@ -3,7 +3,7 @@ from vpython import *
 # Configure the scene
 scene.width = 800
 scene.height = 600
-scene.title = "<h2>Problem 21.13</h2><br><strong>Click to reposition moving charge.</strong><br /><strong>Close when done (this sim does not stop on its own).</strong><br /><br />"
+scene.title = "<h2>Problem 21.13</h2><strong>Click to reposition moving charge.</strong><br /><strong>Close when done (this sim does not stop on its own).</strong><br /><br />"
 
 # Constants
 charge_radius = 3e-4
@@ -20,11 +20,6 @@ def scale_factor(force):
     factor = charge_radius / mag(force)
     # print("Scale factor will be ", factor)
     return factor
-
-
-def detect_collision(sph1, sph2):
-    dist_squared = pow(sph2.pos.x - sph1.pos.x, 2) + pow(sph2.pos.y - sph1.pos.y, 2) + pow(sph2.pos.z - sph1.pos.z, 2)
-    return dist_squared <= pow(sph1.radius + sph2.radius, 2)
 
 
 # axes
@@ -134,8 +129,9 @@ while True:
     # while not physically accurate, if the r-vec gets too small (approaches 0)
     # then the force approaches infinity and q4 flies off the screen entirely
     # so...this stops that
-    for objects in ((q1, f14), (q2, f24), (q3, f34)):
-        if detect_collision(objects[0], q4):
+    for objects in ([q1, f14], [q2, f24], [q3, f34]):
+        dist_squared = pow(objects[0].pos.x - q4.pos.x, 2) + pow(objects[0].pos.y - q4.pos.y, 2)
+        if dist_squared <= pow(q1.radius + q2.radius, 2):
             fnet -= objects[1]
 
     # print("fnet = ", fnet)
