@@ -3,7 +3,7 @@ from vpython import *
 # Configure the scene
 scene.width = 800
 scene.height = 600
-scene.title = "<h2>Problem 22.19</h2><p>Simulates the electric field at a particular point of interest due to a uniformly charged rod of length L located at the origin.</p><p>Solution to theoretical electric field: <a href='https://bit.ly/3n3B7pg' target='_blank'>https://bit.ly/3n3B7pg</a></p><br />"
+scene.title = "<h2>Problem 22.19</h2><p>Simulates the electric field at a particular point of interest due to uniformly charged rod of length L located at the origin.</p><p>Solution to theoretical electric field: <a href='https://bit.ly/3n3B7pg' target='_blank'>https://bit.ly/3n3B7pg</a></p><br />"
 
 # Config
 pos_color = color.red  # for positive charges, color them red

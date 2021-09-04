@@ -3,7 +3,7 @@ from vpython import *
 # Configure the scene
 scene.width = 800
 scene.height = 600
-scene.title = "<h2>Problem 22.24</h2><p>Simulates the electric field at a particular point of interest located at the origin due to a non-uniformly charged arc of radius R.</p><br />"
+scene.title = "<h2>Problem 22.24</h2><p>Simulates the electric field at a particular point of interest located at the origin due to non-uniformly charged arc of radius R.</p><br />"
 
 # Config
 pos_color = color.red  # for positive charges, color them red
