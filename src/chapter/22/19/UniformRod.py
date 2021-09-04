@@ -49,6 +49,9 @@ e_total_mag_th = mag(vec(((k * Q * (1 - sqrt(2))) / (pow(L, 2) * sqrt(2))), ((k 
 percent_diff = ((e_total_mag_ex - e_total_mag_th) / e_total_mag_th) * 100  # percent difference from theory
 
 # print results
+print(f"Rod length (L): {L:.2f} m")
+print(f"Total charge (Q): {Q} C")
+print(f"Charge distribution (λ): {lam} C/m")
 print(f"Experimental electric field magnitude: {e_total_mag_ex:.4f} N/C")
 print(f"Theoretical electric field magnitude: {e_total_mag_th:.4f} N/C")
-print(f"Experimental percent difference from theory: {percent_diff:.4f}%")
+print(f"Experimental percent difference from theory: {percent_diff:.3f}%")
