@@ -80,7 +80,7 @@ percent_diff = ((e_total_mag_ex - e_total_mag_th) / e_total_mag_th) * 100  # per
 # print results
 print(f"Rod length (L): {L:.2f} m")
 print(f"Total charge (Q): {Q} C")
-print(f"Charge distribution constant (α): {alpha} C/m^3")
+print(f"Charge distribution constant (α): {alpha:.4e} C/m^3")
 print(f"Experimental electric field magnitude: {e_total_mag_ex:.4f} N/C")
 print(f"Theoretical electric field magnitude: {e_total_mag_th:.4f} N/C")
 print(f"Experimental percent difference from theory: {percent_diff:.3f}%")
