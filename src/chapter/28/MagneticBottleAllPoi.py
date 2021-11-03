@@ -1,7 +1,7 @@
 from vpython import *
 
 # design
-scene.title = "<h1>Magnetic Bottle Simulation</h1><p>Electron initially stuck in a magnetic bottle. The particle will corkscrew within the bottle until it his a loss cone (not depicted) at which point<br />it will leave the system. Simulation does not stop on its own. Press \"Stop simulation\" or close the page when done.<br />"
+scene.title = "<h1>Magnetic Bottle Simulation</h1><p>Electron initially stuck in a magnetic bottle. The particle will corkscrew within the bottle until it hits a loss cone (not depicted) at which point<br />it will leave the system. Simulation does not stop on its own. Press \"Stop simulation\" or close the page when done.<br />"
 scene.width = 960
 scene.height = 720
 scene.background = vec(161, 152, 151) / 255
@@ -14,7 +14,7 @@ theta_max = 2 * pi  # max angle of ring, radians
 total_theta = theta_max - theta_min  # total angle of ring, radians
 dtheta = total_theta / num_slices  # differential angle of each slice, radians
 mu_naught = (4 * pi) * 1e-7  # tesla*meter/sec
-current = -500 # amps
+current = -500  # amps
 integration_constant = (mu_naught * current) / (4 * pi)  # constant out front of BS law integral
 
 # size constants
