@@ -1,8 +1,8 @@
 from vpython import *
 
 # constants
-ring_radius = 0.105  # radius of ring, meters
-num_slices = 360  # how many slices to cut ring into; num slices 360 causes huge pdiff why?
+ring_radius = 5  # radius of ring, meters
+num_slices = 36  # how many slices to cut ring into; num slices 360 causes huge pdiff why?
 theta_min = 0  # min angle of ring, radians
 theta_max = 2 * pi  # max angle of ring, radians
 total_theta = theta_max - theta_min  # total angle of ring, radians
@@ -15,9 +15,9 @@ integration_constant = (mu_naught * current) / (4 * pi)  # constant out front of
 scale_factor = 2e-14  # factor by which to scale arrows
 
 # axes
-line_x = cylinder(pos=vec(-0.15, 0, 0), axis=vec(0.30, 0, 0), radius=0.0005)
-line_y = cylinder(pos=vec(0, -0.15, 0), axis=vec(0, 0.30, 0), radius=0.0005)
-line_z = cylinder(pos=vec(0, 0, -0.15), axis=vec(0, 0, 0.30), radius=0.0005)
+line_x = cylinder(pos=vec(-5, 0, 0), axis=vec(10, 0, 0), radius=0.05)
+line_y = cylinder(pos=vec(0, -5, 0), axis=vec(0, 10, 0), radius=0.05)
+line_z = cylinder(pos=vec(0, 0, -5), axis=vec(0, 0, 10), radius=0.05)
 label_x = label(pos=line_x.pos + line_x.axis, text='x', height=10)  # set axes labels
 label_y = label(pos=line_y.pos + line_y.axis, text='y', height=10)
 label_z = label(pos=line_z.pos + line_z.axis, text='z', height=10)
@@ -54,19 +54,20 @@ def calc_mag_field(position):
 ring = ring(pos=vec(0, 0, 0), axis=vec(1, 0, 0), radius=ring_radius, thickness=0.005)
 
 # draw poi and calc data
-point_of_interest = vec(0, 0, 0)
-point_of_interest_indicator = sphere(pos=point_of_interest, radius=0.01, color=color.red)
+point_of_interest = vec(4, 0, 0)
+point_of_interest_indicator = sphere(pos=point_of_interest, radius=0.15, color=color.red)
 
 # calculate exp b field
 exp_b_field = calc_mag_field(point_of_interest)  # mag field at POI
-exp_b_field_arrow = arrow(pos=point_of_interest, axis=exp_b_field * 3e1, color=color.blue)  # arrow for exp_b_field
+exp_b_field_arrow = arrow(pos=point_of_interest, axis=exp_b_field * 1e5, color=color.blue)  # arrow for exp_b_field
 print(f"exp b field = {exp_b_field}")
+print(f"hat exp b field = {hat(exp_b_field)}")
 print(f"magnitude exp b field = {mag(exp_b_field)}")
 
 # find theoretical b field
-th_b_field = (mu_naught * current * ring_radius ** 2) / (2 * (ring_radius ** 2 + point_of_interest.x ** 2) ** 1.5)
+th_b_field = abs((mu_naught * current * ring_radius ** 2) / (2 * (ring_radius ** 2 + point_of_interest.x ** 2) ** 1.5))
 # th_b_field = (mu_naught * current) / (2*ring_radius)
-print(f"th b field = {th_b_field}")
+print(f"magnitude th b field = {th_b_field}")
 
 # find pdiff from theory
 pdiff = ((mag(exp_b_field) - th_b_field) / th_b_field) * 100   # percent difference calc, ((exp - theo)/theo) * 100
