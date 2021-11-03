@@ -137,8 +137,8 @@ def set_electron(settings, already_exists=None):
     out.momentum = settings['momentum']
     out.b_force = settings['b_force']
 
-    label_pos = out.pos + vec(0, 0.25, 0)
-    label_text = f"{mag(out.velocity):.4f}m/s"
+    label_pos = out.pos + vec(0, 0.15, 0)
+    label_text = f"{mag(out.velocity) / 1000:.2f} km/s"
 
     if exists:
         out.b_field_arrow.pos = out.pos
@@ -183,7 +183,7 @@ def simulate_proton():
 
     while True:
         # rate loop to 60 itr/sec
-        rate(120)
+        rate(1024)
 
         # if the sim should not run, skip iteration
         if not run_sim:
@@ -210,8 +210,8 @@ def simulate_proton():
         # print(f"Position of electron is ({proton.pos.x:.2e}, {proton.pos.y:.2e}, {proton.pos.z:.2e})")
 
         # update velocity label
-        electron.velocity_label.text = f"{mag(electron.velocity):.4f}m/s"
-        electron.velocity_label.pos = electron.pos + vec(0, 0.25, 0)
+        electron.velocity_label.text = f"{mag(electron.velocity) / 1000:.2f} km/s"
+        electron.velocity_label.pos = electron.pos + vec(0, 0.15, 0)
 
         # update arrows
         electron.b_field_arrow.pos = electron.pos
