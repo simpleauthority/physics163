@@ -6,7 +6,7 @@ wire_length = 20  # length of wire, meters
 y_min = -(wire_length / 2)  # bottom end from origin, meters
 y_max = wire_length / 2  # top end from origin, meters
 dy = wire_length / num_slices  # length of each slice, meters
-print(f"dy = {dy}\n")
+# print(f"dy = {dy}\n")
 
 # computation constants
 mu_naught = (4 * pi) * 1e-7  # tesla*meter/sec
@@ -58,37 +58,35 @@ def calc_mag_field(segments=[], points_of_interest=[]):
 for x in arange(-10, 12, 2):
     for y in arange(-10, 12, 2):
         for z in arange(-10, 12, 2):
-            rate(60)
-
             if x == 0 and y == 0 and z == 0:
                 continue
 
             point_of_interest = vec(x, y, z)
             b = calc_mag_field(wire, [point_of_interest])
             b_mag = mag(b)
-            print(f"b_mag = {b_mag}")
+            # print(f"b_mag = {b_mag}")
 
             desat_b = b
             if b_mag > sat_level:
-                print(">> desaturating")
+                # print(">> desaturating")
                 desat_b = sat_level * hat(b)
 
             desat_b_mag = mag(desat_b)
-            print(f"desat_b_mag = {desat_b_mag}")
+            # print(f"desat_b_mag = {desat_b_mag}")
 
             if desat_b_mag != 0:
                 b_arrow_color = color.blue if b_mag > desat_b_mag else color.white
                 b_arrow_opacity = (desat_b_mag / b_mag)
-                print(f">> opacity = {b_arrow_opacity}")
+                # print(f">> opacity = {b_arrow_opacity}")
                 b_arrow = arrow(pos=point_of_interest, axis=desat_b * scale_factor(desat_b), color=b_arrow_color, opacity=b_arrow_opacity)
-                print(b_arrow.axis)
+                # print(b_arrow.axis)
 
             b_theory = 0
             a = mag(point_of_interest)
             if a != 0:
                 b_theory = (mu_naught * i) / (2 * pi * a)
 
-            print(f"b @ {point_of_interest} = {b} (= {b_mag:.3e})")
-            print(f"b_exact @ {point_of_interest} = {b_theory:.3e}")
-            print(f"pdiff @ {point_of_interest} = {((b_mag - b_theory) / b_theory) * 100:.2f}%")
-            print()
+            # print(f"b @ {point_of_interest} = {b} (= {b_mag:.3e})")
+            # print(f"b_exact @ {point_of_interest} = {b_theory:.3e}")
+            # print(f"pdiff @ {point_of_interest} = {((b_mag - b_theory) / b_theory) * 100:.2f}%")
+            # print()
