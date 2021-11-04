@@ -1,5 +1,8 @@
 from vpython import *
 
+scene.height = 720
+scene.width = 960
+
 # wire size constants
 num_slices = 200  # how many slices to cut wire into
 wire_length = 20  # length of wire, meters
@@ -23,6 +26,10 @@ def scale_factor(target):
     return (wire_length / 4) / mag(target)
 
 
+# # rotate 90 deg about x,y
+# scene.camera.rotate(radians(90), vec(0, 1, 0))
+# scene.camera.rotate(radians(90), vec(1, 0, 0))
+
 # axes
 line_x = cylinder(pos=vec(-12, 0, 0), axis=vec(24, 0, 0), radius=0.1, color=color.white)
 line_y = cylinder(pos=vec(0, y_min - 2, 0), axis=vec(0, 2 * (y_max + 2), 0), radius=0.1, color=color.white)
@@ -30,8 +37,8 @@ line_y = cylinder(pos=vec(0, y_min - 2, 0), axis=vec(0, 2 * (y_max + 2), 0), rad
 # draw wire
 wire = []
 for y in arange(y_min, y_max, dy):
-    segment = cylinder(pos=vec(0, y, 0), axis=vec(0, dy, 0), opacity=0.5)  # create segment on screen
-    segment.i_arrow = arrow(pos=segment.pos + vec(0, dy / 4, 0), axis=vec(0, i * 0.75, 0), color=color.red)  # draw current (for visual only)
+    segment = cylinder(pos=vec(0, y, 0), axis=vec(0, dy, 0), opacity=0.25)  # create segment on screen
+    segment.i_arrow = arrow(pos=segment.pos + vec(0, dy / 4, 0), axis=vec(0, i, 0), color=color.red)  # draw current (for visual only)
     wire.append(segment)
 
 
