@@ -1,4 +1,5 @@
 from vpython import *
+# import time
 
 # wire size constants
 num_slices = 200  # how many slices to cut wire into
@@ -35,24 +36,72 @@ for y in arange(y_min, y_max, dy):
     wire.append(segment)
 
 
-def calc_mag_field(segments=[], points_of_interest=[]):
+def calc_mag_field(chunks, poi):
     b_experimental = vec(0, 0, 0)
 
-    for segment in segments:
-        segment_pos = segment.pos + vec(0, dy/2, 0)
-        ds = segment.axis
+    for chunk in chunks:
+        source = chunk.pos + vec(0, dy / 2, 0)  # calculate middle of chunk
+        ds = chunk.axis
 
-        for point_of_interest in points_of_interest:
-            r = point_of_interest - segment_pos  # calculate r vector from middle of source to POI
-            if mag(r) == 0:
-                print(f"r = 0; B_field would be infinite at this area. Skipping iteration.")
-                continue
+        r = poi - source  # calculate r vector from middle of source to POI
+        if mag(r) == 0:
+            print(f"r = 0; B_field would be infinite at this area. Skipping iteration.")
+            continue
 
-            db = integration_constant * cross(ds, r) / (mag(r) ** 3)  # differential b
-            b_experimental += db  # add diff B to total B
+        db = integration_constant * cross(ds, r) / (mag(r) ** 3)  # differential b
+        b_experimental += db  # add diff B to total B
 
     return b_experimental
 
+
+# def quick_gen_chunks(len, num):
+#     y_min = -len/2
+#     y_max = len/2
+#
+#     dy = len/num
+#     ds = vec(0, dy, 0)
+#
+#     chunks = []
+#     for y in arange(y_min, y_max, dy):
+#         chunks.append(vec(0, y, 0))
+#
+#     return ds, dy, chunks
+#
+#
+# def quick_calc_b(ds, dy, chunks, poi):
+#     b = vec(0, 0, 0)
+#
+#     for chunk in chunks:
+#         src = chunk + vec(0, dy/2, 0)
+#         r = poi - src
+#         if mag(r) != 0:
+#             b += integration_constant * cross(ds, r) / (mag(r) ** 3)
+#
+#     return b
+#
+#
+# for len in [10]:
+#     num = len / 0.001
+#     print(f"calculating L={len}, N={num}")
+#
+#     b_fields = []
+#     ds, dy, chunks = quick_gen_chunks(len, num)
+#     ts = time.time()
+#     for x in arange(-10, 10, 0.01):
+#         if x != 0:
+#             x_pos = vec(x, 0, 0)
+#             b = quick_calc_b(ds, dy, chunks, x_pos)
+#             b_mag = mag(b)
+#             b_theory = abs((mu_naught * i) / (2 * pi * x_pos.x))
+#             b_fields.append((x_pos, b_mag, b_theory, ((b_mag - b_theory) / b_theory) * 100))
+#     te = time.time()
+#     print("data:")
+#
+#     for each in b_fields:
+#         print(f"{each[0].x},{each[1]},{each[2]},{each[3]}%")
+#
+#     print(f"took {(te-ts):2.22f} seconds")
+#     print()
 
 # draw POIs, calculate B at those POIs, and draw arrows
 for x in arange(-10, 12, 2):
@@ -62,7 +111,7 @@ for x in arange(-10, 12, 2):
                 continue
 
             point_of_interest = vec(x, y, z)
-            b = calc_mag_field(wire, [point_of_interest])
+            b = calc_mag_field(wire, point_of_interest)
             b_mag = mag(b)
             # print(f"b_mag = {b_mag}")
 
