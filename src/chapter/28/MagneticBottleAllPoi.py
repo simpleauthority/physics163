@@ -143,8 +143,6 @@ def set_electron(settings, already_exists=None):
     label_text = f"{mag(out.velocity) / 1000:.2f} km/s"
 
     if exists:
-        out.b_field_arrow.pos = out.pos
-        out.b_field_arrow.axis = out.b_field * scale_factor(out.b_field, prop_to=out.radius)
         out.velocity_label.pos = label_pos
         out.velocity_label.text = label_text
         out.velocity_arrow.pos = out.pos
@@ -152,7 +150,6 @@ def set_electron(settings, already_exists=None):
         out.force_arrow.pos = out.pos
         out.force_arrow.axis = out.b_force * scale_factor(out.b_force, prop_to=out.radius)
     else:
-        out.b_field_arrow = arrow(pos=out.pos, axis=out.b_field * scale_factor(out.b_field), color=color.magenta)
         out.velocity_label = label(pos=label_pos, text=label_text, height=10)
         out.velocity_arrow = arrow(pos=out.pos, axis=out.velocity * scale_factor(out.velocity), color=color.purple)
         out.force_arrow = arrow(pos=out.pos, axis=out.b_force * scale_factor(out.b_force), color=color.orange)
@@ -216,8 +213,6 @@ def simulate_electron():
         electron.velocity_label.pos = electron.pos + vec(0, 0.15, 0)
 
         # update arrows
-        electron.b_field_arrow.pos = electron.pos
-        electron.b_field_arrow.axis = b_field * scale_factor(b_field)
         electron.velocity_arrow.pos = electron.pos
         electron.velocity_arrow.axis = electron.velocity * scale_factor(electron.velocity)
         electron.force_arrow.pos = electron.pos
@@ -236,11 +231,27 @@ def toggle_sim_running(b):
         b.text = "Start simulation"
 
 
+# def get_b_field_along_x():
+#     b_fields = []
+#     dx = (x_max - x_min) / 2000
+#     for x in arange(x_min, x_min+x_max+dx, dx):
+#         poi = vec(x, 0, 0)
+#         b = mag(calc_mag_field([left_ring, right_ring], poi))
+#         b_th = abs((mu_naught * current * pow(ring_radius, 2)) / (2 * pow(pow(ring_radius, 2) + pow(left_ring.pos.x - x, 2), 1.5))) + abs((mu_naught * current * pow(ring_radius, 2)) / (2 * pow(pow(ring_radius, 2) + pow(right_ring.pos.x - x, 2), 1.5)))
+#         pdiff = ((b - b_th) / b_th) * 100
+#         b_fields.append((x, b, b_th, pdiff))
+#
+#     for field in b_fields:
+#         print(f"{field[0]}, {field[1]}, {field[2]}, {field[3]}%")
+
+
 # GUI stuff
 toggle_button = button(pos=scene.title_anchor, bind=toggle_sim_running, text="Start/stop simulation")
 scene.append_to_title("  ")
 reset_button = button(pos=scene.title_anchor, bind=reset_electron, text="Reset simulation")
 scene.append_to_title("\n\n")
+
+# get_b_field_along_x()
 
 # start electron simulation
 simulate_electron()
