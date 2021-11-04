@@ -45,7 +45,7 @@ def calc_mag_field(chunks, poi):
 
         r = poi - source  # calculate r vector from middle of source to POI
         if mag(r) == 0:
-            print(f"r = 0; B_field would be infinite at this area. Skipping iteration.")
+            print("r = 0; B_field would be infinite at this area. Skipping iteration.")
             continue
 
         db = integration_constant * cross(ds, r) / (mag(r) ** 3)  # differential b
