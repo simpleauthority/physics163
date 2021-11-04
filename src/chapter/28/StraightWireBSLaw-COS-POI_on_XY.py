@@ -4,7 +4,7 @@ scene.height = 720
 scene.width = 960
 
 # wire size constants
-num_slices = 200  # how many slices to cut wire into
+num_slices = 2000  # how many slices to cut wire into
 wire_length = 20  # length of wire, meters
 y_min = -(wire_length / 2)  # bottom end from origin, meters
 y_max = wire_length / 2  # top end from origin, meters
@@ -38,37 +38,43 @@ line_y = cylinder(pos=vec(0, y_min - 2, 0), axis=vec(0, 2 * (y_max + 2), 0), rad
 wire = []
 for y in arange(y_min, y_max, dy):
     segment = cylinder(pos=vec(0, y, 0), axis=vec(0, dy, 0), opacity=0.25)  # create segment on screen
-    segment.i_arrow = arrow(pos=segment.pos + vec(0, dy / 4, 0), axis=vec(0, i, 0), color=color.red)  # draw current (for visual only)
+    # segment.i_arrow = arrow(pos=segment.pos + vec(0, dy / 4, 0), axis=vec(0, i, 0), color=color.red)  # draw current (for visual only)
     wire.append(segment)
 
 
-def calc_mag_field(segments=[], points_of_interest=[]):
+# noinspection PyShadowingNames
+def calc_mag_field(segments, point_of_interest):
     b_experimental = vec(0, 0, 0)
+
+    r_tot = vec(0, 0, 0)
+    ds_tot = vec(0, 0, 0)
 
     for segment in segments:
         segment_pos = segment.pos + vec(0, dy/2, 0)
         ds = segment.axis
+        ds_tot += ds
 
-        for point_of_interest in points_of_interest:
-            r = point_of_interest - segment_pos  # calculate r vector from middle of source to POI
-            if mag(r) == 0:
-                print(f"r = 0; B_field would be infinite at this area. Skipping iteration.")
-                continue
+        r = point_of_interest - segment_pos  # calculate r vector from middle of source to POI
+        if mag(r) == 0:
+            print(f"r = 0; B_field would be infinite at this area. Skipping iteration.")
+            continue
 
-            db = integration_constant * cross(ds, r) / (mag(r) ** 3)  # differential b
-            b_experimental += db  # add diff B to total B
+        r_tot += r
 
-    return b_experimental
+        db = integration_constant * cross(ds, r) / (mag(r) ** 3)  # differential b
+        b_experimental += db  # add diff B to total B
+
+    return b_experimental, hat(cross(ds_tot, r_tot))
 
 
 # draw POIs, calculate B at those POIs, and draw arrows
 for x in arange(-10, 12, 2):
     for y in arange(-10, 12, 2):
-        if x == 0 and y == 0:
+        if x == 0:
             continue
 
         point_of_interest = vec(x, y, 0)
-        b = calc_mag_field(wire, [point_of_interest])
+        b, r_hat = calc_mag_field(wire, point_of_interest)
         b_mag = mag(b)
 
         desat_b = b
@@ -79,14 +85,26 @@ for x in arange(-10, 12, 2):
         if desat_b_mag != 0:
             b_arrow_color = color.red if b_mag > desat_b_mag else color.white
             b_arrow_opacity = b_mag / desat_b_mag
-            b_arrow = arrow(pos=point_of_interest, axis=desat_b * scale_factor(desat_b), color=b_arrow_color, opacity=b_arrow_opacity)
+            b_arrow = arrow(pos=point_of_interest, axis=desat_b * 1e8, color=b_arrow_color, opacity=b_arrow_opacity)
 
-        b_theory = 0
+        b_theory = vec(0, 0, 0)
+        b_theory_mag = 0
         a = mag(point_of_interest)
         if a != 0:
-            b_theory = (mu_naught * i) / (2 * pi * a)
+            b_theory = ((mu_naught * i) / (2 * pi * a)) * hat(r_hat)
+            b_theory_mag = mag(b_theory)
+
+            desat_b_th = b_theory
+            if mag(desat_b_th) > sat_level:
+                desat_b_th = sat_level * hat(b_theory)
+
+            desat_b_th_mag = mag(desat_b_th)
+            if desat_b_th_mag != 0:
+                b_th_arrow_color = color.yellow if b_theory_mag > desat_b_th_mag else color.blue
+                b_th_arrow_opacity = b_theory_mag / desat_b_th_mag
+                b_th_arrow = arrow(pos=point_of_interest, axis=desat_b_th * 1e8, color=b_th_arrow_color, opacity=b_th_arrow_opacity)
 
         print(f"b @ {point_of_interest} = {b} (= {b_mag:.3e})")
-        print(f"b_exact @ {point_of_interest} = {b_theory:.3e}")
-        print(f"pdiff @ {point_of_interest} = {((b_mag - b_theory) / b_theory) * 100:.2f}%")
+        print(f"b_exact @ {point_of_interest} = {b_theory} (= {b_theory_mag:.3e})")
+        print(f"pdiff @ {point_of_interest} = {((b_mag - b_theory_mag) / b_theory_mag) * 100:.2f}%")
         print()

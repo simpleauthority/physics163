@@ -11,7 +11,7 @@ dy = wire_length / num_slices  # length of each slice, meters
 
 # computation constants
 mu_naught = (4 * pi) * 1e-7  # tesla*meter/sec
-i = 1.00  # amps
+i = -1.00  # amps
 i_flow_direction = 1 if i > 0 else -1
 integration_constant = (mu_naught * i) / (4 * pi)  # constant out front of BS law integral
 
@@ -39,19 +39,25 @@ for y in arange(y_min, y_max, dy):
 def calc_mag_field(chunks, poi):
     b_experimental = vec(0, 0, 0)
 
+    r_tot = vec(0, 0, 0)
+    ds_tot = vec(0, 0, 0)
+
     for chunk in chunks:
         source = chunk.pos + vec(0, dy / 2, 0)  # calculate middle of chunk
         ds = chunk.axis
+        ds_tot += ds
 
         r = poi - source  # calculate r vector from middle of source to POI
         if mag(r) == 0:
-            print("r = 0; B_field would be infinite at this area. Skipping iteration.")
+            print(f"r = 0; B_field would be infinite at this area. Skipping iteration.")
             continue
+
+        r_tot += r
 
         db = integration_constant * cross(ds, r) / (mag(r) ** 3)  # differential b
         b_experimental += db  # add diff B to total B
 
-    return b_experimental
+    return b_experimental, hat(cross(ds_tot, r_tot))
 
 
 # def quick_gen_chunks(len, num):
@@ -111,7 +117,7 @@ for x in arange(-10, 12, 2):
                 continue
 
             point_of_interest = vec(x, y, z)
-            b = calc_mag_field(wire, point_of_interest)
+            b, r_hat = calc_mag_field(wire, point_of_interest)
             b_mag = mag(b)
             # print(f"b_mag = {b_mag}")
 
@@ -124,16 +130,28 @@ for x in arange(-10, 12, 2):
             # print(f"desat_b_mag = {desat_b_mag}")
 
             if desat_b_mag != 0:
-                b_arrow_color = color.blue if b_mag > desat_b_mag else color.white
+                b_arrow_color = color.red if b_mag > desat_b_mag else color.white
                 b_arrow_opacity = (desat_b_mag / b_mag)
                 # print(f">> opacity = {b_arrow_opacity}")
                 b_arrow = arrow(pos=point_of_interest, axis=desat_b * scale_factor(desat_b), color=b_arrow_color, opacity=b_arrow_opacity)
                 # print(b_arrow.axis)
 
-            b_theory = 0
+            b_theory = vec(0, 0, 0)
+            b_theory_mag = 0
             a = mag(point_of_interest)
             if a != 0:
-                b_theory = (mu_naught * i) / (2 * pi * a)
+                b_theory = ((mu_naught * i) / (2 * pi * a)) * hat(r_hat)
+                b_theory_mag = mag(b_theory)
+
+                desat_b_th = b_theory
+                if mag(desat_b_th) > sat_level:
+                    desat_b_th = sat_level * hat(b_theory)
+
+                desat_b_th_mag = mag(desat_b_th)
+                if desat_b_th_mag != 0:
+                    b_th_arrow_color = color.yellow if b_theory_mag > desat_b_th_mag else color.blue
+                    b_th_arrow_opacity = b_theory_mag / desat_b_th_mag
+                    b_th_arrow = arrow(pos=point_of_interest, axis=desat_b_th * 1e8, color=b_th_arrow_color, opacity=b_th_arrow_opacity)
 
             # print(f"b @ {point_of_interest} = {b} (= {b_mag:.3e})")
             # print(f"b_exact @ {point_of_interest} = {b_theory:.3e}")
