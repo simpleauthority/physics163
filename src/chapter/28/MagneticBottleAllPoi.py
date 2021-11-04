@@ -47,8 +47,10 @@ scene.autoscale = False
 
 # essential methods
 # calculate the magnetic field caused by the given rings at a given point of interest
+
+# noinspection PyShadowingNames
 def calc_mag_field(rings, point_of_interest):
-    b_total = vec(0, 0, 0)  # total magnetic field
+    b_total = vec(0, 0, 0)
 
     for theta in arange(theta_min, theta_max, dtheta):
         theta_hat = vec(0, cos(theta), -sin(theta))
