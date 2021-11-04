@@ -83,7 +83,7 @@ def create_ring(pos):
 left_ring = create_ring(vec(x_min, 0, 0))
 right_ring = create_ring(vec(x_min+x_max, 0, 0))
 
-# proton settings
+# electron settings
 electron_init = dict()
 electron_init['pos'] = vec(0, ring_radius / 8, 0)
 electron_init['charge'] = -1.602e-19
@@ -125,7 +125,7 @@ def draw_b_field():
                     b_arrow.poi = poi
 
 
-# create physical proton from given settings
+# create physical electron from given settings
 def set_electron(settings, already_exists=None):
     exists = already_exists is not None
 
@@ -160,7 +160,7 @@ def set_electron(settings, already_exists=None):
     return out
 
 
-# draw proton
+# draw electron
 electron = set_electron(electron_init)
 
 # draw b field
@@ -177,7 +177,7 @@ def reset_electron():
     electron.clear_trail()
 
 
-def simulate_proton():
+def simulate_electron():
     global run_sim, electron
 
     t = 0
@@ -196,20 +196,20 @@ def simulate_proton():
 
         # find force on electron due to B_total
         electron.magnetic_force = cross(electron.charge * electron.velocity, b_field)
-        # print(f"Force on electron is {proton.magnetic_force}N ({mag(proton.magnetic_force)}N)")
+        # print(f"Force on electron is {electron.magnetic_force}N ({mag(electron.magnetic_force)}N)")
 
         # update electron's momentum
         electron.momentum += electron.magnetic_force * dt
-        # print(f"Momentum of electron is {proton.momentum}kgm/s")
+        # print(f"Momentum of electron is {electron.momentum}kgm/s")
 
         # update electron's velocity
         electron.velocity = electron.momentum / electron.mass
         electron.vperp2b = cross(electron.velocity, b_field)
-        # print(f"Velocity of electron is {proton.velocity}m/s")
+        # print(f"Velocity of electron is {electron.velocity}m/s")
 
         # update the position due to the updated momentum
         electron.pos += electron.velocity * dt
-        # print(f"Position of electron is ({proton.pos.x:.2e}, {proton.pos.y:.2e}, {proton.pos.z:.2e})")
+        # print(f"Position of electron is ({electron.pos.x:.2e}, {electron.pos.y:.2e}, {electron.pos.z:.2e})")
 
         # update velocity label
         electron.velocity_label.text = f"{mag(electron.velocity) / 1000:.2f} km/s"
@@ -242,5 +242,5 @@ scene.append_to_title("  ")
 reset_button = button(pos=scene.title_anchor, bind=reset_electron, text="Reset simulation")
 scene.append_to_title("\n\n")
 
-# start proton simulation
-simulate_proton()
+# start electron simulation
+simulate_electron()
