@@ -54,7 +54,8 @@ def calc_mag_field(segments, point_of_interest):
 
 
 # draw POIs, calculate B at those POIs, and draw arrows
-for x in arange(-10, 12, 2):
+b_fields = []
+for x in arange(-10, 10.2, 0.1):
     if x == 0:
         continue
 
@@ -89,7 +90,12 @@ for x in arange(-10, 12, 2):
             b_th_arrow_opacity = b_theory_mag / desat_b_th_mag
             b_th_arrow = arrow(pos=point_of_interest, axis=desat_b_th * 1e8, color=b_th_arrow_color, opacity=b_th_arrow_opacity)
 
-    print(f"b @ {point_of_interest} = {b} (= {b_mag:.3e})")
-    print(f"b_exact @ {point_of_interest} = {b_theory} = ({b_theory_mag:.3e})")
-    print(f"pdiff @ {point_of_interest} = {((b_mag - b_theory_mag) / b_theory_mag) * 100:.2f}%")
-    print()
+    b_fields.append((x, b_mag, b_theory_mag, ((b_mag - b_theory_mag) / b_theory_mag) * 100))
+
+    # print(f"b @ {point_of_interest} = {b} (= {b_mag:.3e})")
+    # print(f"b_exact @ {point_of_interest} = {b_theory} = ({b_theory_mag:.3e})")
+    # print(f"pdiff @ {point_of_interest} = {((b_mag - b_theory_mag) / b_theory_mag) * 100:.2f}%")
+    # print()
+
+for field in b_fields:
+    print(f"{field[0]},{field[1]},{field[2]},{field[3]}%")
